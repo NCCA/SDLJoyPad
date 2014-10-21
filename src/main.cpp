@@ -225,14 +225,19 @@ SDL_GLContext createOpenGLContext(SDL_Window *window)
   // for some reason we need this for mac but linux crashes on the latest nvidia drivers
   // under centos
   #ifdef DARWIN
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+  #else
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+
+
   #endif
   // set multi sampling else we get really bad graphics that alias
   SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,4);
+  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,3);
   // Turn on double buffering with a 24bit Z buffer.
   // You may need to change this to 16 or 32 for your system
   // on mac up to 32 will work but under linux centos build only 16
