@@ -60,11 +60,9 @@ Game::Game()
 
 Game::~Game()
 {
-  ngl::NGLInit *Init = ngl::NGLInit::instance();
   std::cout<<"Shutting down NGL, removing VAO's and Shaders\n";
   delete m_cam;
   delete m_shipMesh;
-  Init->NGLQuit();
 }
 
 void Game::resize(int _w, int _h)
