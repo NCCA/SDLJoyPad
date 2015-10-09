@@ -16,7 +16,7 @@ enum XBOXAxis
 };
 
 // So mappings are different for the same controller on different os!
-#ifdef DARWIN
+#ifdef __APPLE__
 enum XBOXButtons
 {
   XBOXBUTTONA, // 0
