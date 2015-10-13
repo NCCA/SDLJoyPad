@@ -37,7 +37,7 @@ enum XBOXButtons
 };
 #endif
 
-#ifdef LINUX
+#ifdef __linux__
 enum XBOXButtons
 {
   XBOXBUTTONA, // 0
