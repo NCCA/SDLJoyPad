@@ -16,6 +16,8 @@ ${PROJECT_SOURCE_DIR}/include/Rocket.h
 ${PROJECT_SOURCE_DIR}/include/StarMap.h        
 ${PROJECT_SOURCE_DIR}/include/XBoxController.h
 )
+# use C++ 11
+set(CMAKE_CXX_STANDARD 11)
 
 # see what platform we are on and set platform defines
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
