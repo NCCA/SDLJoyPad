@@ -34,6 +34,6 @@ void Rocket::draw() const
   t.setPosition(m_pos);
   t.setRotation(0,-90,0);
   MVP= t.getMatrix()*m_camera->getVPMatrix();
-  shader->setShaderParamFromMat4("MVP",MVP);
+  shader->setUniform("MVP",MVP);
   m_mesh->draw();
 }

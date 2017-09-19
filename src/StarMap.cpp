@@ -33,7 +33,7 @@ void StarMap::draw()
   ngl::Mat4 MVP;
 
   MVP=t.getMatrix()*m_camera->getVPMatrix();
-  shader->setShaderParamFromMat4("MVP",MVP);
+  shader->setUniform("MVP",MVP);
   glBindTexture(GL_TEXTURE_2D,m_texID);
   prim->draw("starmap");
 
@@ -42,7 +42,7 @@ void StarMap::draw()
   glBindTexture(GL_TEXTURE_2D,m_texID2);
 
   MVP=t.getMatrix()*m_camera->getVPMatrix();
-  shader->setShaderParamFromMat4("MVP",MVP);
+  shader->setUniform("MVP",MVP);
   prim->draw("starmap");
   glDisable(GL_BLEND);
 
