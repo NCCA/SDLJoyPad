@@ -1,4 +1,4 @@
-#SDLJoyPad
+# SDLJoyPad
 ![alt tag](http://nccastaff.bournemouth.ac.uk/jmacey/GraphicsLib/Demos/JoyPad.png)
 
 This demo requires SDL 2.0 and a wireless xbox controller. Under the mac you can install this driver. Under linux you may have to install the xpad kernel driver
