@@ -32,7 +32,7 @@ void StarMap::draw()
   rot+=0.01;
   ngl::Mat4 MVP;
 
-  MVP=t.getMatrix()*m_camera->getVPMatrix();
+  MVP=m_camera->getVPMatrix()*t.getMatrix();
   shader->setUniform("MVP",MVP);
   glBindTexture(GL_TEXTURE_2D,m_texID);
   prim->draw("starmap");

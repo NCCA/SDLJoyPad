@@ -33,7 +33,7 @@ void Rocket::draw() const
   ngl::Transformation t;
   t.setPosition(m_pos);
   t.setRotation(0,-90,0);
-  MVP= t.getMatrix()*m_camera->getVPMatrix();
+  MVP= m_camera->getVPMatrix()*t.getMatrix();
   shader->setUniform("MVP",MVP);
   m_mesh->draw();
 }
