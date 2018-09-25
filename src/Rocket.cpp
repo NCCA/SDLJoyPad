@@ -2,11 +2,11 @@
 #include <ngl/Transformation.h>
 #include <ngl/ShaderLib.h>
 
-Rocket::Rocket(const ngl::Vec3 &_startPos, float _speed, ngl::Obj *_mesh, ngl::Camera *_cam)
+Rocket::Rocket(const ngl::Vec3 &_startPos, float _speed, std::shared_ptr<ngl::Obj>_mesh,  const ngl::Mat4 &_view,  const ngl::Mat4 &_project):
+m_view(_view),m_project(_project)
 {
   m_pos=_startPos;
   m_life=0;
-  m_camera=_cam;
   m_mesh=_mesh;
   m_speed=_speed;
   m_active=true;
@@ -33,7 +33,7 @@ void Rocket::draw() const
   ngl::Transformation t;
   t.setPosition(m_pos);
   t.setRotation(0,-90,0);
-  MVP= m_camera->getVPMatrix()*t.getMatrix();
+  MVP= m_project*m_view*t.getMatrix();
   shader->setUniform("MVP",MVP);
   m_mesh->draw();
 }

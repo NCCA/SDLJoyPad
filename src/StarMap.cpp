@@ -3,7 +3,8 @@
 #include <ngl/Texture.h>
 #include <ngl/ShaderLib.h>
 #include <ngl/Transformation.h>
-StarMap::StarMap(std::string _texture, std::string _texture2, ngl::Camera *_cam)
+StarMap::StarMap(std::string _texture, std::string _texture2, const ngl::Mat4 &_view, const ngl::Mat4 &_project) :
+  m_view(_view),m_project(_project)
 {
 
   ngl::Texture t(_texture);
@@ -13,7 +14,6 @@ StarMap::StarMap(std::string _texture, std::string _texture2, ngl::Camera *_cam)
 
   ngl::VAOPrimitives *prim=ngl::VAOPrimitives::instance();
   prim->createSphere("starmap",300,20);
-  m_camera=_cam;
 }
 
 void StarMap::draw()
@@ -32,16 +32,16 @@ void StarMap::draw()
   rot+=0.01;
   ngl::Mat4 MVP;
 
-  MVP=m_camera->getVPMatrix()*t.getMatrix();
+  MVP=m_project*m_view*t.getMatrix();
   shader->setUniform("MVP",MVP);
   glBindTexture(GL_TEXTURE_2D,m_texID);
   prim->draw("starmap");
 
   t.setRotation(0,rot*8,0);
-  t.setScale(0.91,0.91,0.91);
+  t.setScale(0.91f,0.91f,0.91f);
   glBindTexture(GL_TEXTURE_2D,m_texID2);
 
-  MVP=t.getMatrix()*m_camera->getVPMatrix();
+  MVP=m_project*m_view*t.getMatrix();
   shader->setUniform("MVP",MVP);
   prim->draw("starmap");
   glDisable(GL_BLEND);

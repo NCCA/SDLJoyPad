@@ -1,7 +1,6 @@
 #include "Game.h"
 #include <ngl/ShaderLib.h>
 #include <ngl/NGLInit.h>
-#include <ngl/Material.h>
 #include <algorithm>
 
 Game::Game()
@@ -44,16 +43,16 @@ Game::Game()
   ngl::Vec3 to(0,0,0);
   ngl::Vec3 up(0,1,0);
   // now load to our new camera
-  m_cam= new ngl::Camera(from,to,up);
+  m_view=ngl::lookAt(from,to,up);
   // set the shape using FOV 45 Aspect Ratio based on Width and Height
   // The final two are near and far clipping planes of 0.5 and 10
-  m_cam->setShape(45,(float)720.0/576.0,0.05,350);
-  m_shipMesh = new ngl::Obj("models/SpaceShip.obj","textures/spaceship.bmp");
+  m_project=ngl::perspective(45.0f,720.0f/576.0f,0.05f,350.0f);
+  m_shipMesh = std::make_unique<ngl::Obj>("models/SpaceShip.obj","textures/spaceship.bmp");
   m_shipMesh->createVAO();
 
-  m_rocket = new ngl::Obj("models/rocket.obj","textures/rockets.bmp");
+  m_rocket = std::make_unique<ngl::Obj>("models/rocket.obj","textures/rockets.bmp");
   m_rocket->createVAO();
-  m_starmap = new StarMap("textures/starmap.png","textures/PlanetMap.tif",m_cam);
+  m_starmap = std::make_unique<StarMap>("textures/starmap.png","textures/PlanetMap.tif",m_view,m_project);
 
 
 }
@@ -61,15 +60,20 @@ Game::Game()
 Game::~Game()
 {
   std::cout<<"Shutting down NGL, removing VAO's and Shaders\n";
-  delete m_cam;
-  delete m_shipMesh;
 }
 
 void Game::resize(int _w, int _h)
 {
   glViewport(0,0,_w,_h);
   // now set the camera size values as the screen size has changed
-  m_cam->setShape(45,(float)_w/_h,0.05,350);
+  m_project=ngl::perspective(45,static_cast<float>(_w)/_h,0.05f,350.0f);
+}
+
+void Game::move(float _dx, float _dy, float _dz)
+{
+  m_modelPos.m_x+=_dx;
+  m_modelPos.m_y+=_dy;
+  m_modelPos.m_z+=_dz;
 }
 
 void Game::draw()
@@ -93,7 +97,7 @@ void Game::draw()
   {
     m_transform.setPosition(m_modelPos);
 
-    m_transform.addPosition(-5,-0.6,2);
+    m_transform.addPosition(-5,-0.6f,2);
     m_transform.setRotation(0,-90,0);
     loadMatricesToShader();
     m_rocket->draw();
@@ -102,17 +106,17 @@ void Game::draw()
   {
     m_transform.setPosition(m_modelPos);
 
-    m_transform.addPosition(5,-0.6,2);
-    m_transform.setRotation(0,-90,0);
+    m_transform.addPosition(5.0f,-0.6f,2.0f);
+    m_transform.setRotation(0.0f,-90.0f,0.0f);
     loadMatricesToShader();
     m_rocket->draw();
   }
 
   // now draw the rockets
-  std::list <Rocket *>::iterator start=m_rockets.begin();
-  std::list <Rocket *>::iterator end=m_rockets.end();
-  // we can use std::for_each and pass in a member function to draw
-  std::for_each(start,end,std::mem_fun(&Rocket::draw));
+  for(auto &rocket : m_rockets)
+  {
+    rocket->draw();
+  }
   m_starmap->draw();
 
 }
@@ -120,12 +124,13 @@ void Game::draw()
 
 void Game::update()
 {
-  std::list <Rocket *>::iterator start=m_rockets.begin();
-  std::list <Rocket *>::iterator end=m_rockets.end();
-  // iterater an update the rockets
-  std::for_each(start,end,std::mem_fun(&Rocket::update));
+  for(auto &rocket : m_rockets)
+  {
+    rocket->update();
+  }
   // now check the list and call the isActive method and remove if false
-  m_rockets.remove_if(std::not1(std::mem_fun(&Rocket::isActive)));
+
+ // std::remove_if(std::begin(m_rockets),std::end(m_rockets),std::not1(std::mem_fun(&Rocket::isActive)));
   // update the size of the active rockets
   m_activeRockets=m_rockets.size();
 }
@@ -135,11 +140,10 @@ void Game::fireLeft(float _speed)
   if( m_activeRockets !=m_maxRockets )
   {
     ngl::Vec3 p=m_modelPos;
-    p.m_x+=-5;
-    p.m_y+=-0.6;
-    p.m_z+=2;
-    Rocket *r = new Rocket(p,_speed,m_rocket,m_cam);
-    m_rockets.push_back(r);
+    p.m_x+=-5.0f;
+    p.m_y+=-0.6f;
+    p.m_z+=2.0f;
+    m_rockets.emplace_back(std::make_unique<Rocket>(p,_speed,m_rocket,m_view,m_project));
     ++m_activeRockets;
   }
 }
@@ -152,8 +156,7 @@ void Game::fireRight(float _speed)
     p.m_x+=5;
     p.m_y+=-0.6;
     p.m_z+=2;
-    Rocket *r = new Rocket(p,_speed,m_rocket,m_cam);
-    m_rockets.push_back(r);
+    m_rockets.emplace_back(std::make_unique<Rocket>(p,_speed,m_rocket,m_view,m_project));
     ++m_activeRockets;
   }
 
@@ -164,6 +167,6 @@ void Game::loadMatricesToShader()
   ngl::ShaderLib *shader=ngl::ShaderLib::instance();
 
   ngl::Mat4 MVP;
-  MVP= m_cam->getVPMatrix()*m_transform.getMatrix();
+  MVP= m_project*m_view*m_transform.getMatrix();
   shader->setUniform("MVP",MVP);
 }
