@@ -1,5 +1,5 @@
-#ifndef XBOXCONTROLLER_H__
-#define XBOXCONTROLLER_H__
+#ifndef XBOXCONTROLLER_H_
+#define XBOXCONTROLLER_H_
 
 namespace
 {
@@ -37,9 +37,10 @@ enum XBOXButtons
 };
 #endif
 
-#ifdef __linux__
+#if  defined(__linux__) || defined(WIN32)
 enum XBOXButtons
 {
+
   XBOXBUTTONA, // 0
   XBOXBUTTONB, // 1
   XBOXBUTTONX, // 2

@@ -1,3 +1,6 @@
+#ifdef WIN32
+    #define SDL_MAIN_HANDLED
+#endif
 #include <SDL.h>
 #include <SDL_haptic.h>
 #include <cstdlib>
@@ -149,7 +152,7 @@ int main()
       } // end of event switch
     } // end of poll events
 
-   if(js != 0)
+   if(js != nullptr)
     {
       // check back button to quit
       if(SDL_JoystickGetButton(js,XBOXBUTTONBACK) )
@@ -231,7 +234,7 @@ SDL_GLContext createOpenGLContext(SDL_Window *window)
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
   #else
 
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);

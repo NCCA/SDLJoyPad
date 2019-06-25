@@ -19,6 +19,14 @@ LIBS+=$$system(sdl2-config  --libs)
 message(output from sdl2-config --libs added to LIB=$$LIBS)
 macx:LIBS+=$$system(sdl2-config  --static-libs)
 
+win32 :{
+    message(Make sure that SDL2 is installed using vcpkg install SDL2 )
+  #  message("package dir is" $$VCPK)
+  INCLUDEPATH += $$(HOMEDRIVE)\\$$(HOMEPATH)\vcpkg\installed\x86-windows\include\SDL2
+
+  PRE_TARGETDEPS+=$$(HOMEDRIVE)\\$$(HOMEPATH)\vcpkg\installed\x86-windows\lib\SDL2.lib
+  LIBS+=-L$$(HOMEDRIVE)\\$$(HOMEPATH)\vcpkg\installed\x86-windows\lib\ -lSDL2
+}
 
 
 # where to put moc auto generated files
@@ -60,8 +68,9 @@ CONFIG += console
 }
 NGLPATH=$$(NGLDIR)
 isEmpty(NGLPATH){ # note brace must be here
-	message("including $HOME/NGL")
-	include($(HOME)/NGL/UseNGL.pri)
+        !win32:message("including $HOME/NGL")
+        !win32:include($(HOME)/NGL/UseNGL.pri)
+        win32:include($(HOMEDRIVE)\$(HOMEPATH)\NGL\UseNGL.pri)
 }
 else{ # note brace must be here
 	message("Using custom NGL location")

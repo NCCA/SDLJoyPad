@@ -154,7 +154,7 @@ void Game::fireRight(float _speed)
   {
     ngl::Vec3 p=m_modelPos;
     p.m_x+=5;
-    p.m_y+=-0.6;
+    p.m_y+=-0.6f;
     p.m_z+=2;
     m_rockets.emplace_back(std::make_unique<Rocket>(p,_speed,m_rocket,m_view,m_project));
     ++m_activeRockets;

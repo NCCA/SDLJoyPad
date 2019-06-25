@@ -29,7 +29,7 @@ void StarMap::draw()
   (*shader)["Texture"]->use();
   ngl::Transformation t;
   t.setRotation(rot,0,0);
-  rot+=0.01;
+  rot+=0.01f;
   ngl::Mat4 MVP;
 
   MVP=m_project*m_view*t.getMatrix();
