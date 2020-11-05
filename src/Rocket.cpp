@@ -25,8 +25,7 @@ void Rocket::update()
 void Rocket::draw() const
 {
   // grab an instance of the shader manager
-  ngl::ShaderLib *shader=ngl::ShaderLib::instance();
-  (*shader)["Texture"]->use();
+  ngl::ShaderLib::use("Texture");
   ngl::Mat4 MV;
   ngl::Mat4 MVP;
   ngl::Mat4 M;
@@ -34,6 +33,6 @@ void Rocket::draw() const
   t.setPosition(m_pos);
   t.setRotation(0,-90,0);
   MVP= m_project*m_view*t.getMatrix();
-  shader->setUniform("MVP",MVP);
+  ngl::ShaderLib::setUniform("MVP",MVP);
   m_mesh->draw();
 }

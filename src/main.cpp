@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <SDL_haptic.h>
 #include <cstdlib>
+#include <iostream>
 #include "Game.h"
 #include "XBoxController.h"
 #include <ngl/Text.h>
@@ -72,11 +73,11 @@ int main()
    }
    // make this our current GL context (we can have more than one window but in this case not)
    SDL_GL_MakeCurrent(window, glContext);
-  /* This makes our buffer swap syncronized with the monitor's vertical refresh */
+  /* This makes our buffer swap synchronized with the monitor's vertical refresh */
   SDL_GL_SetSwapInterval(1);
   // we need to do this here now we have a gl context so we can use GL commands from the
   // loader gen
-  ngl::NGLInit::instance();
+  ngl::NGLInit::initialize();
   // now clear the screen and swap whilst NGL inits (which may take time)
   glClear(GL_COLOR_BUFFER_BIT);
   SDL_GL_SwapWindow(window);
@@ -91,9 +92,9 @@ int main()
   // resize the ngl to set the screen size and camera stuff
   game.resize(rect.w,rect.h);
   // these are used for the x,y,z updates of the ship
-  float xupdate=0.0;
-  float yupdate=0.0;
-  float zupdate=0.0;
+  float xupdate=0.0f;
+  float yupdate=0.0f;
+  float zupdate=0.0f;
 
   while(!quit)
   {
@@ -205,7 +206,7 @@ int main()
     } // end of no Joystick
 
     // move the ship
-    std::cout<<xupdate<<" "<<yupdate<<" "<<zupdate<<"\n";
+    std::cout<<xupdate<<' '<<yupdate<<' '<<zupdate<<'\n';
     game.move(xupdate,yupdate,zupdate);
     // this updates the rockets
     game.update();

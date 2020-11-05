@@ -5,7 +5,6 @@
 
 Game::Game()
 {
-  ngl::NGLInit::instance();
   m_maxRockets=200;
   m_activeRockets=0;
   // Now set the initial GLWindow attributes to default values
@@ -14,28 +13,25 @@ Game::Game()
   glEnable(GL_DEPTH_TEST);
 
 
-  // now to load the shader and set the values
-  // grab an instance of shader manager
-  ngl::ShaderLib *shader=ngl::ShaderLib::instance();
   // we are creating a shader called Texture
-  shader->createShaderProgram("Texture");
+  ngl::ShaderLib::createShaderProgram("Texture");
   // now we are going to create empty shaders for Frag and Vert
-  shader->attachShader("TextureVertex",ngl::ShaderType::VERTEX);
-  shader->attachShader("TextureFragment",ngl::ShaderType::FRAGMENT);
+  ngl::ShaderLib::attachShader("TextureVertex",ngl::ShaderType::VERTEX);
+  ngl::ShaderLib::attachShader("TextureFragment",ngl::ShaderType::FRAGMENT);
   // attach the source
-  shader->loadShaderSource("TextureVertex","shaders/TextureVertex.glsl");
-  shader->loadShaderSource("TextureFragment","shaders/TextureFragment.glsl");
+  ngl::ShaderLib::loadShaderSource("TextureVertex","shaders/TextureVertex.glsl");
+  ngl::ShaderLib::loadShaderSource("TextureFragment","shaders/TextureFragment.glsl");
   // compile the shaders
-  shader->compileShader("TextureVertex");
-  shader->compileShader("TextureFragment");
+  ngl::ShaderLib::compileShader("TextureVertex");
+  ngl::ShaderLib::compileShader("TextureFragment");
   // add them to the program
-  shader->attachShaderToProgram("Texture","TextureVertex");
-  shader->attachShaderToProgram("Texture","TextureFragment");
+  ngl::ShaderLib::attachShaderToProgram("Texture","TextureVertex");
+  ngl::ShaderLib::attachShaderToProgram("Texture","TextureFragment");
 
   // now we have associated this data we can link the shader
-  shader->linkProgramObject("Texture");
+  ngl::ShaderLib::linkProgramObject("Texture");
   // and make it active ready to load values
-  (*shader)["Texture"]->use();
+  ngl::ShaderLib::use("Texture");
   // Now we will create a basic Camera from the graphics library
   // This is a static camera so it only needs to be set once
   // First create Values for the camera position
@@ -82,8 +78,7 @@ void Game::draw()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // grab an instance of the shader manager
-  ngl::ShaderLib *shader=ngl::ShaderLib::instance();
-  (*shader)["Texture"]->use();
+  ngl::ShaderLib::use("Texture");
 
   // Rotation based on the mouse position for our global transform
   m_transform.reset();
@@ -164,9 +159,7 @@ void Game::fireRight(float _speed)
 
 void Game::loadMatricesToShader()
 {
-  ngl::ShaderLib *shader=ngl::ShaderLib::instance();
-
   ngl::Mat4 MVP;
   MVP= m_project*m_view*m_transform.getMatrix();
-  shader->setUniform("MVP",MVP);
+  ngl::ShaderLib::setUniform("MVP",MVP);
 }
