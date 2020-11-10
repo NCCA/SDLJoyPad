@@ -1,8 +1,8 @@
 #ifdef WIN32
     #define SDL_MAIN_HANDLED
 #endif
-#include <SDL.h>
-#include <SDL_haptic.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_haptic.h>
 #include <cstdlib>
 #include <iostream>
 #include "Game.h"
