@@ -39,7 +39,7 @@ target_link_libraries(${TargetName} PRIVATE  NGL)
 target_link_libraries(${TargetName} PRIVATE  SDL2::SDL2-static)
 
 
-add_custom_target(CopyShaders ALL
+add_custom_target(${TargetName}CopyShaders ALL
 		COMMAND ${CMAKE_COMMAND} -E copy_directory
 		${CMAKE_CURRENT_SOURCE_DIR}/shaders
 		$<TARGET_FILE_DIR:${TargetName}>/shaders
