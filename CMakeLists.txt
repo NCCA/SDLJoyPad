@@ -36,7 +36,7 @@ target_sources(${TargetName} PRIVATE ${PROJECT_SOURCE_DIR}/src/main.cpp
 			${PROJECT_SOURCE_DIR}/include/XBoxController.h 
 			)
 target_link_libraries(${TargetName} PRIVATE  NGL)
-target_link_libraries(${TargetName} PRIVATE  SDL2::SDL2-static)
+target_link_libraries(${TargetName} PRIVATE  SDL2::SDL2)
 
 
 add_custom_target(${TargetName}CopyShaders ALL
